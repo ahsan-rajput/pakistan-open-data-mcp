@@ -40,3 +40,22 @@ for res in data["resources"]:
 print("\n--- GROUP_LIST (categories) ---")
 response = requests.get(f"{BASE_URL}/group_list")
 print(json.dumps(response.json(), indent=2))
+
+# 5. Investigate facets to find out how "categories" really work here
+print("\n--- FACETS on package_search ---")
+response = requests.get(f"{BASE_URL}/package_search", params={
+    "rows": 0,  # we don't need actual results, just the facet counts
+    "facet.field": '["tags", "groups", "organization", "res_format"]'
+})
+data = response.json()["result"]
+facets = data.get("search_facets", {})
+
+for facet_name, facet_data in facets.items():
+    print(f"\n{facet_name}:")
+    for item in facet_data.get("items", [])[:15]:
+        print(f"   {item['name']}  ({item['count']})")
+
+# 6. Also check tag_list directly
+print("\n--- TAG_LIST ---")
+response = requests.get(f"{BASE_URL}/tag_list")
+print(response.json()["result"][:30])
