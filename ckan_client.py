@@ -81,3 +81,13 @@ if __name__ == "__main__":
     category_results = browse_by_category("health", rows=5)
     for r in category_results:
         print(r["title"], "-", r["organization"])
+
+    print("\n--- ERROR TEST: fake dataset ---")
+    try:
+        get_dataset_details("this-does-not-exist-12345")
+    except ValueError as e:
+        print("Caught expected error:", e)
+
+    print("\n--- ERROR TEST: nonsense search ---")
+    empty_results = search_datasets("asdkjhaskjdhaksjdh")
+    print("Results found:", len(empty_results))
