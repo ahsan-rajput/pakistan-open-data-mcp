@@ -53,6 +53,29 @@ def get_dataset_details(name: str) -> dict:
         "resources": resources,
     }
 
+def browse_by_category(category: str, rows: int = 10) -> list[dict]:
+    """
+    Browse datasets by category (implemented as CKAN tags on this portal).
+    Returns the same shape as search_datasets().
+    """
+    response = requests.get(f"{BASE_URL}/package_search", params={
+        "fq": f"tags:{category}",
+        "rows": rows,
+    })
+    response.raise_for_status()
+    data = response.json()["result"]
+
+    results = []
+    for pkg in data["results"]:
+        results.append({
+            "title": pkg["title"],
+            "name": pkg["name"],
+            "description": (pkg.get("notes") or "")[:300],
+            "organization": pkg["organization"]["title"] if pkg.get("organization") else "Unknown",
+            "formats": list({res["format"] for res in pkg["resources"] if res.get("format")}),
+        })
+    return results
+
 if __name__ == "__main__":
     # test search_datasets
     results = search_datasets("education", rows=5)
@@ -67,3 +90,9 @@ if __name__ == "__main__":
     print("Organization:", details["organization"])
     for res in details["resources"]:
         print(" -", res["name"], "|", res["format"], "|", res["url"])
+
+        # test browse_by_category
+    print("\n--- CATEGORY: health ---")
+    category_results = browse_by_category("health", rows=5)
+    for r in category_results:
+        print(r["title"], "-", r["organization"])
