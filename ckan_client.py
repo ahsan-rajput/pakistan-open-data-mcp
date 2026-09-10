@@ -3,31 +3,40 @@ import requests
 BASE_URL = "https://opendata.com.pk/api/3/action"
 
 
+def _parse_package_summary(pkg: dict) -> dict:
+    """Shared helper: turns a raw CKAN package dict into our clean summary shape."""
+    return {
+        "title": pkg["title"],
+        "name": pkg["name"],
+        "description": (pkg.get("notes") or "")[:300],
+        "organization": pkg["organization"]["title"] if pkg.get("organization") else "Unknown",
+        "formats": list({res["format"] for res in pkg["resources"] if res.get("format")}),
+    }
+
+
 def search_datasets(query: str, rows: int = 10) -> list[dict]:
-    """
-    Search datasets by keyword.
-    Returns a list of dicts with: title, name, description, organization, formats.
-    """
+    """Search datasets by keyword. Returns a list of dataset summaries."""
     response = requests.get(f"{BASE_URL}/package_search", params={"q": query, "rows": rows})
     response.raise_for_status()
     data = response.json()["result"]
+    return [_parse_package_summary(pkg) for pkg in data["results"]]
 
-    results = []
-    for pkg in data["results"]:
-        results.append({
-            "title": pkg["title"],
-            "name": pkg["name"],
-            "description": (pkg.get("notes") or "")[:300],
-            "organization": pkg["organization"]["title"] if pkg.get("organization") else "Unknown",
-            "formats": list({res["format"] for res in pkg["resources"] if res.get("format")}),
-        })
-    return results
+
+def browse_by_category(category: str, rows: int = 10) -> list[dict]:
+    """Browse datasets by category (CKAN tag). Returns a list of dataset summaries."""
+    response = requests.get(f"{BASE_URL}/package_search", params={
+        "fq": f"tags:{category}",
+        "rows": rows,
+    })
+    response.raise_for_status()
+    data = response.json()["result"]
+    return [_parse_package_summary(pkg) for pkg in data["results"]]
+
 
 def get_dataset_details(name: str) -> dict:
     """
-    Get full details of a single dataset by its name/id.
-    Returns dict with: title, description, organization, last_updated, resources (list of files with name/format/url).
-    Raises an exception if the dataset doesn't exist.
+    Get full details of a single dataset by its name/id, including download links.
+    Raises ValueError if the dataset doesn't exist.
     """
     response = requests.get(f"{BASE_URL}/package_show", params={"id": name})
 
@@ -37,13 +46,14 @@ def get_dataset_details(name: str) -> dict:
 
     pkg = response.json()["result"]
 
-    resources = []
-    for res in pkg["resources"]:
-        resources.append({
+    resources = [
+        {
             "name": res.get("name") or "Unnamed file",
             "format": res.get("format") or "Unknown",
             "url": res.get("url"),
-        })
+        }
+        for res in pkg["resources"]
+    ]
 
     return {
         "title": pkg["title"],
@@ -53,36 +63,12 @@ def get_dataset_details(name: str) -> dict:
         "resources": resources,
     }
 
-def browse_by_category(category: str, rows: int = 10) -> list[dict]:
-    """
-    Browse datasets by category (implemented as CKAN tags on this portal).
-    Returns the same shape as search_datasets().
-    """
-    response = requests.get(f"{BASE_URL}/package_search", params={
-        "fq": f"tags:{category}",
-        "rows": rows,
-    })
-    response.raise_for_status()
-    data = response.json()["result"]
-
-    results = []
-    for pkg in data["results"]:
-        results.append({
-            "title": pkg["title"],
-            "name": pkg["name"],
-            "description": (pkg.get("notes") or "")[:300],
-            "organization": pkg["organization"]["title"] if pkg.get("organization") else "Unknown",
-            "formats": list({res["format"] for res in pkg["resources"] if res.get("format")}),
-        })
-    return results
 
 if __name__ == "__main__":
-    # test search_datasets
     results = search_datasets("education", rows=5)
     for r in results:
         print(r["title"], "-", r["organization"], "-", r["formats"])
 
-    # test get_dataset_details
     print("\n--- DETAILS ---")
     details = get_dataset_details("hies-data-2024-25")
     print("Title:", details["title"])
@@ -91,7 +77,6 @@ if __name__ == "__main__":
     for res in details["resources"]:
         print(" -", res["name"], "|", res["format"], "|", res["url"])
 
-        # test browse_by_category
     print("\n--- CATEGORY: health ---")
     category_results = browse_by_category("health", rows=5)
     for r in category_results:
