@@ -59,3 +59,14 @@ for facet_name, facet_data in facets.items():
 print("\n--- TAG_LIST ---")
 response = requests.get(f"{BASE_URL}/tag_list")
 print(response.json()["result"][:30])
+
+# 7. Confirm we can filter by tag (category) directly
+print("\n--- FILTER BY TAG: 'health' ---")
+response = requests.get(f"{BASE_URL}/package_search", params={
+    "fq": "tags:health",
+    "rows": 3
+})
+data = response.json()["result"]
+print("Count:", data["count"])
+for pkg in data["results"]:
+    print(" -", pkg["title"])
