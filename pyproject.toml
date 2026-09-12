@@ -1,0 +1,9 @@
+[project]
+name = "pakistan-open-data-mcp"
+version = "0.1.0"
+description = "MCP server for searching and retrieving datasets from Pakistan's National Open Data Portal"
+requires-python = ">=3.10"
+dependencies = [
+    "mcp[cli]>=1.0.0",
+    "requests>=2.31.0",
+]

@@ -1,0 +1,46 @@
+{
+  "manifest_version": "0.4",
+  "name": "pakistan-open-data-mcp",
+  "display_name": "Pakistan Open Data",
+  "version": "1.0.0",
+  "description": "Search and retrieve real datasets from Pakistan's National Open Data Portal (opendata.com.pk) - over 1,500 government and research datasets across health, education, economy, and more.",
+    "author": {
+    "name": "Muhammad Ahsan",
+    "email": "muhammadahsan.se.4@gmail.com"
+  },
+    "server": {
+    "type": "uv",
+    "entry_point": "server.py"
+  },
+  "tools": [
+    {
+      "name": "search_open_data",
+      "description": "Search Pakistan's National Open Data Portal for datasets matching a keyword. Returns matching datasets with title, description, publishing organization, and available formats."
+    },
+    {
+      "name": "get_dataset_info",
+      "description": "Get full details of one specific dataset from Pakistan's Open Data Portal, including its description, publishing organization, last updated date, and downloadable files with direct URLs."
+    },
+    {
+      "name": "browse_open_data_by_category",
+      "description": "Browse datasets on Pakistan's Open Data Portal by category, such as health, education, economy, trade, employment, or population."
+    },
+    {
+      "name": "get_download_links",
+      "description": "Get direct download URLs for a specific dataset's data files, given its dataset name/id."
+    }
+  ],
+  "keywords": [
+    "pakistan",
+    "open-data",
+    "ckan",
+    "government-data",
+    "datasets",
+    "mcp"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ahsan-rajput/pakistan-open-data-mcp"
+  }
+}
