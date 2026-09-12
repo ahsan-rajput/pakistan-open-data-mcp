@@ -8,9 +8,18 @@
     "name": "Muhammad Ahsan",
     "email": "muhammadahsan.se.4@gmail.com"
   },
-    "server": {
+     "server": {
     "type": "uv",
-    "entry_point": "server.py"
+    "entry_point": "server.py",
+    "mcp_config": {
+      "command": "uv",
+      "args": [
+        "run",
+        "--directory",
+        "${__dirname}",
+        "server.py"
+      ]
+    }
   },
   "tools": [
     {
