@@ -1,6 +1,7 @@
 # Pakistan Open Data MCP Server
 
 Ask in plain English, get pointed straight to the exact Pakistani government dataset you need.
+![Demo: asking Claude Desktop about Pakistani open data](demo.gif)
 
 An MCP (Model Context Protocol) server that lets AI assistants like Claude search, browse, and retrieve real datasets from [Pakistan's National Open Data Portal](https://opendata.com.pk) — 1,500+ datasets covering health, education, economy, agriculture, demography, and more — without manually browsing and filtering the website.
 
