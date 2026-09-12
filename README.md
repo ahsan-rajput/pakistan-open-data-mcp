@@ -46,6 +46,13 @@ Built with the [official MCP Python SDK](https://github.com/modelcontextprotocol
 
 ### Option 1: Install as a Claude Desktop Extension (easiest)
 
+**Requires [`uv`](https://docs.astral.sh/uv/getting-started/installation/) to be installed** — this lets Claude Desktop manage the Python environment automatically. Install it with:
+```bash
+pip install uv
+```
+(or see the [official uv install guide](https://docs.astral.sh/uv/getting-started/installation/) for other methods)
+
+Then:
 1. Download `pakistan-open-data-mcp.mcpb` from this repo
 2. Double-click it, or open it via Claude Desktop → Settings → Extensions → Advanced settings → Install Extension
 3. Restart Claude Desktop if prompted
