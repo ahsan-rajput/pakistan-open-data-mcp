@@ -1,3 +1,4 @@
+import os
 from mcp.server import MCPServer
 from ckan_client import search_datasets, get_dataset_details, browse_by_category
 
@@ -60,5 +61,7 @@ def get_download_links(dataset_name: str) -> list[dict]:
     ]
 
 
+
 if __name__ == "__main__":
-    mcp.run(transport="streamable-http", host="0.0.0.0", port=8000)
+    port = int(os.environ.get("PORT", 8000))
+    mcp.run(transport="streamable-http", host="0.0.0.0", port=port)
