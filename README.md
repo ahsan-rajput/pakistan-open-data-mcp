@@ -42,9 +42,16 @@ The portal runs on [CKAN](https://ckan.org) (confirmed: version 2.8.3), an open-
 
 Built with the [official MCP Python SDK](https://github.com/modelcontextprotocol/python-sdk). Includes basic in-memory TTL caching (5 minutes) to avoid hammering the portal's public infrastructure with repeated identical requests, and clear error handling for missing datasets or empty search results.
 
+## Live remote server
+
+This server is also hosted and publicly reachable — no install required. Add it as a custom connector in Claude (claude.ai, Claude Desktop, or the Claude mobile app): https://pakistan-open-data-mcp.onrender.com/mcp
+
+
+**Note:** This runs on a free hosting tier, so if it hasn't been used in the last ~15 minutes, the first request may take 30-60 seconds to respond while it wakes up. After that, it's fast.
+
 ## Setup
 
-### Option 1: Install as a Claude Desktop Extension (easiest)
+### Option 1: Install as a Claude Desktop Extension (local, one-click)
 
 **Requires [`uv`](https://docs.astral.sh/uv/getting-started/installation/) to be installed** — this lets Claude Desktop manage the Python environment automatically. Install it with:
 ```bash
@@ -58,7 +65,11 @@ Then:
 3. Restart Claude Desktop if prompted
 4. Start asking questions about Pakistani open data
 
-### Option 2: Run it manually (for development)
+### Option 2: Use the hosted remote server
+
+See [Live remote server](#live-remote-server) above — just add the URL as a custom connector, no download needed.
+
+### Option 3: Run it manually (for development)
 
 Requires Python 3.10+.
 
@@ -70,6 +81,8 @@ venv\Scripts\activate        # Windows
 pip install -r requirements.txt
 python server.py
 ```
+
+This runs the server locally over stdio. To run it as a local HTTP server instead (what the hosted version uses), set the `PORT` environment variable and it'll listen on `http://0.0.0.0:<PORT>/mcp`.
 
 ## Example questions to ask
 
@@ -84,7 +97,8 @@ python server.py
 - Python 3.10+
 - [Official MCP Python SDK](https://github.com/modelcontextprotocol/python-sdk)
 - `requests` for HTTP calls to the CKAN API
-- Packaged as a Claude Desktop Extension (`.mcpb`) using [MCPB](https://github.com/modelcontextprotocol/mcpb) with the `uv` runtime for dependency-free installation
+- Packaged as a Claude Desktop Extension (`.mcpb`) using [MCPB](https://github.com/modelcontextprotocol/mcpb) with the `uv` runtime for dependency-free local installation
+- Also deployed as a remote Streamable HTTP server, hosted on [Render](https://render.com)
 
 ## License
 
