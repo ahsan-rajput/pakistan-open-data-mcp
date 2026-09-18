@@ -1,9 +1,25 @@
 # Pakistan Open Data MCP Server
 
+![License](https://img.shields.io/badge/license-MIT-green.svg)
+![Python](https://img.shields.io/badge/python-3.10%2B-blue.svg)
+![MCP](https://img.shields.io/badge/MCP-compatible-orange.svg)
+![Status](https://img.shields.io/badge/status-live-brightgreen.svg)
+![Hosted on Render](https://img.shields.io/badge/hosted%20on-Render-46E3B7.svg)
+
 Ask in plain English, get pointed straight to the exact Pakistani government dataset you need.
-![Demo: asking Claude Desktop about Pakistani open data](demo.gif)
 
 An MCP (Model Context Protocol) server that lets AI assistants like Claude search, browse, and retrieve real datasets from [Pakistan's National Open Data Portal](https://opendata.com.pk) — 1,500+ datasets covering health, education, economy, agriculture, demography, and more — without manually browsing and filtering the website.
+
+## Try it now — no install required
+
+Add this as a custom connector in Claude (claude.ai, Claude Desktop, or mobile app — Settings → Connectors → Add custom connector): https://pakistan-open-data-mcp.onrender.com/mcp
+
+
+Then just ask something like *"find me health datasets from Pakistan."*
+
+> Runs on a free hosting tier — if it's been idle, the first response may take up to a minute while it wakes up. After that, it's fast.
+
+![Demo: asking Claude Desktop about Pakistani open data](demo.gif)
 
 ## Example
 
@@ -42,14 +58,7 @@ The portal runs on [CKAN](https://ckan.org) (confirmed: version 2.8.3), an open-
 
 Built with the [official MCP Python SDK](https://github.com/modelcontextprotocol/python-sdk). Includes basic in-memory TTL caching (5 minutes) to avoid hammering the portal's public infrastructure with repeated identical requests, and clear error handling for missing datasets or empty search results.
 
-## Live remote server
-
-This server is also hosted and publicly reachable — no install required. Add it as a custom connector in Claude (claude.ai, Claude Desktop, or the Claude mobile app): https://pakistan-open-data-mcp.onrender.com/mcp
-
-
-**Note:** This runs on a free hosting tier, so if it hasn't been used in the last ~15 minutes, the first request may take 30-60 seconds to respond while it wakes up. After that, it's fast.
-
-## Setup
+## Other ways to run it
 
 ### Option 1: Install as a Claude Desktop Extension (local, one-click)
 
@@ -57,19 +66,13 @@ This server is also hosted and publicly reachable — no install required. Add i
 ```bash
 pip install uv
 ```
-(or see the [official uv install guide](https://docs.astral.sh/uv/getting-started/installation/) for other methods)
 
 Then:
 1. Download `pakistan-open-data-mcp.mcpb` from this repo
 2. Double-click it, or open it via Claude Desktop → Settings → Extensions → Advanced settings → Install Extension
 3. Restart Claude Desktop if prompted
-4. Start asking questions about Pakistani open data
 
-### Option 2: Use the hosted remote server
-
-See [Live remote server](#live-remote-server) above — just add the URL as a custom connector, no download needed.
-
-### Option 3: Run it manually (for development)
+### Option 2: Run it manually (for development)
 
 Requires Python 3.10+.
 
@@ -81,8 +84,6 @@ venv\Scripts\activate        # Windows
 pip install -r requirements.txt
 python server.py
 ```
-
-This runs the server locally over stdio. To run it as a local HTTP server instead (what the hosted version uses), set the `PORT` environment variable and it'll listen on `http://0.0.0.0:<PORT>/mcp`.
 
 ## Example questions to ask
 
@@ -97,9 +98,13 @@ This runs the server locally over stdio. To run it as a local HTTP server instea
 - Python 3.10+
 - [Official MCP Python SDK](https://github.com/modelcontextprotocol/python-sdk)
 - `requests` for HTTP calls to the CKAN API
-- Packaged as a Claude Desktop Extension (`.mcpb`) using [MCPB](https://github.com/modelcontextprotocol/mcpb) with the `uv` runtime for dependency-free local installation
-- Also deployed as a remote Streamable HTTP server, hosted on [Render](https://render.com)
+- Packaged as a Claude Desktop Extension (`.mcpb`) using [MCPB](https://github.com/modelcontextprotocol/mcpb) with the `uv` runtime for local installation
+- Deployed as a remote Streamable HTTP server, hosted on [Render](https://render.com)
 
 ## License
 
 MIT
+
+---
+
+Built by Muhammad Ahsan — [GitHub](https://github.com/ahsan-rajput)
